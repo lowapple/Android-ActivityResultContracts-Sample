@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <files-path name="my_images" path="images/" />
+</paths>
+
+    <!--
+    <files-path …> 는 Context.getFilesDir() 에 해당되는 영역을 말한다.
+    <cache-path …> 는 Context.getCacheDir() 에 해당되는 영역을 말한다.
+    <external-path …> 는 Environment.getExternalStorageDirectory() 에 해당되는 영역을 말한다.
+    <external-files-path …> 는 Context.getExternalFilesDir(String) 에 해당되는 영역이다.
+    <external-cache-path …> 는 Context.getExternalCacheDir() 에 해당되는 영역이다.
+    <external-media-path …> 는 Context.getExternalMediaDirs() 에 해당되는 영역이다. 이건 API 21+ 단말에만 유효하다.
+    -->
+
