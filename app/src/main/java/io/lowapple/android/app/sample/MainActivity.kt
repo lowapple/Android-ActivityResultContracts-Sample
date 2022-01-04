@@ -11,6 +11,7 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
@@ -23,10 +24,15 @@ import java.io.File
 import kotlin.coroutines.CoroutineContext
 
 class MainActivity : AppCompatActivity() {
-
     private lateinit var imageView: ImageView
-    private lateinit var takePictureButton: FloatingActionButton
+
+    // 이미지 촬영
+    private lateinit var takePictureButton: Button
     private lateinit var takePicture: ActivityResultLauncher<Uri>
+
+    // 이미지 선택
+    private lateinit var choosePictureButton: Button
+    private lateinit var choosePicture: ActivityResultLauncher<String>
 
     private var currentImageUri: Uri? = null
 
@@ -48,6 +54,8 @@ class MainActivity : AppCompatActivity() {
 
         imageView = findViewById(R.id.image_view)
         takePictureButton = findViewById(R.id.take_picture_button)
+        choosePictureButton = findViewById(R.id.choose_button)
+
         // 사진 촬영 버튼 리스너 등록
         takePictureButton.setOnClickListener {
             // 권한 체크
@@ -71,7 +79,7 @@ class MainActivity : AppCompatActivity() {
                     takePicture.launch(currentImageUri)
             }
         }
-        // 사진촬영 후 Activity Launcher
+        // 사진촬영 Activity Launcher
         takePicture =
             registerForActivityResult(ActivityResultContracts.TakePicture()) { isTakePicture ->
                 if (isTakePicture) {
@@ -85,6 +93,21 @@ class MainActivity : AppCompatActivity() {
                 }
                 currentImageUri = null
             }
+        // 사진 선택
+        choosePictureButton.setOnClickListener {
+            choosePicture.launch("image/*")
+        }
+        // 사전 선택 Activity Launcher
+        choosePicture = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+            if (uri != null) {
+                imageView.setImageBitmap(
+                    loadBitmapFromUri(uri)
+                )
+                Toast.makeText(this, "사진을 불러왔습니다", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "불러오기를 취소했습니다", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun loadBitmapFromUri(uri: Uri) = runCatching {
